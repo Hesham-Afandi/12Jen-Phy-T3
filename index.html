@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مراجعة هيكل الفيزياء - الصف الثاني عشر عام</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
+        .correct { background-color: #dcfce7 !important; border-color: #16a34a !important; }
+        .incorrect { background-color: #fee2e2 !important; border-color: #dc2626 !important; }
+        .math { font-family: 'Times New Roman', serif; direction: ltr; display: inline-block; }
+        .timer-warning { color: #dc2626 !important; animation: pulse 1s infinite; }
+        @keyframes pulse { 50% { opacity: 0.7; } }
+        @media print { .no-print { display: none !important; } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 p-4 md:p-8 min-h-screen">
+
+    <!-- Timer -->
+    <div id="timer-container" class="max-w-4xl mx-auto mb-4 text-center no-print">
+        <div class="bg-white p-4 rounded-xl shadow-md inline-block border-2 border-indigo-100">
+            <span class="text-gray-600 ml-2">⏱️ الوقت المتبقي:</span>
+            <span id="timer" class="text-2xl font-bold text-indigo-600 font-mono">90:00</span>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="max-w-4xl mx-auto mb-6 flex flex-wrap gap-3 justify-center no-print">
+        <button onclick="toggleAnswers()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-medium transition shadow cursor-pointer">
+            👁️ إظهار/إخفاء الحلول
+        </button>
+        <button onclick="window.print()" class="bg-gray-800 hover:bg-gray-900 text-white px-5 py-2 rounded-lg font-medium transition shadow cursor-pointer">
+            🖨️ طباعة / حفظ PDF
+        </button>
+    </div>
+
+    <!-- Header -->
+    <header class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md mb-8 border-r-4 border-indigo-600">
+        <div class="text-center">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">📘 مراجعة هيكل الفيزياء - الصف 12 عام</h1>
+            <h2 class="text-lg text-indigo-600 font-semibold">الفصل الدراسي الثالث (شامل - 58 سؤال)</h2>
+        </div>
+        <div class="mt-4 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+            <span>📅 التاريخ: <input type="text" class="border-b border-gray-400 bg-transparent w-28 text-center"></span>
+            <span>👤 الاسم: <input type="text" id="studentName" class="border-b border-gray-400 bg-transparent w-32 text-center" placeholder="أدخل اسمك"></span>
+            <span>⏱️ المدة: 90 دقيقة</span>
+            <span>📊 الدرجة الكلية: 100</span>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto space-y-8">
+
+        <!-- Section 1: Basic Concepts -->
+        <section class="bg-white p-6 rounded-xl shadow-lg">
+            <h2 class="text-xl font-bold mb-4 text-indigo-700">🔹 الجزء الأول: مفاهيم أساسية وحسابات (التيار، الشحنة، المقاومة النوعية)</h2>
+            <ol id="section1-list" class="space-y-4 text-sm"></ol>
+        </section>
+
+        <!-- Section 2: Resistivity & Dimensions -->
+        <section class="bg-white p-6 rounded-xl shadow-lg">
+            <h2 class="text-xl font-bold mb-4 text-indigo-700">🔹 الجزء الثاني: تأثير الأبعاد والتمديد والمقاومية</h2>
+            <ol id="section2-list" class="space-y-4 text-sm"></ol>
+        </section>
+
+        <!-- Section 3: Ohm's Law & Simple Circuits -->
+        <section class="bg-white p-6 rounded-xl shadow-lg">
+            <h2 class="text-xl font-bold mb-4 text-indigo-700">🔹 الجزء الثالث: قانون أوم والدوائر البسيطة</h2>
+            <ol id="section3-list" class="space-y-4 text-sm"></ol>
+        </section>
+
+        <!-- Section 4: Complex Circuits, Kirchhoff & Diagrams (At the End) -->
+        <section class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-orange-400">
+            <h2 class="text-xl font-bold mb-4 text-orange-700">🔹 الجزء الرابع: تحليل الدوائر المعقدة، كيرشوف، والأسئلة الرسومية (في النهاية)</h2>
+            <p class="text-xs text-gray-500 mb-4">* يتضمن هذا القسم أسئلة كيرشوف، حسابات المقاومة المكافئة، وأسئلة الدوائر القصيرة والمانعات. تم استبدال الرسومات بأوصاف نصية دقيقة.</p>
+            <ol id="section4-list" class="space-y-4 text-sm"></ol>
+        </section>
+
+        <!-- Submit Button -->
+        <div class="text-center no-print pb-8">
+            <button onclick="gradeExam()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-lg px-10 py-4 rounded-xl font-bold shadow-xl transition transform hover:scale-105 cursor-pointer">
+                📝 تسليم وتصحيح الامتحان
+            </button>
+        </div>
+    </main>
+
+    <!-- Results Panel -->
+    <div id="results-panel" class="max-w-4xl mx-auto mt-8 bg-white p-8 rounded-2xl shadow-2xl border-t-4 border-emerald-500 hidden no-print">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">📊 نتيجة الامتحان</h2>
+        <div class="grid md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-blue-50 p-4 rounded-xl text-center"><p>الاسم</p><p id="res-name" class="font-bold text-xl text-indigo-700">-</p></div>
+            <div class="bg-purple-50 p-4 rounded-xl text-center"><p>التاريخ</p><p id="res-date" class="font-bold text-xl text-purple-700">-</p></div>
+            <div class="bg-emerald-50 p-4 rounded-xl text-center"><p>الدرجة النهائية</p><p id="res-total" class="font-bold text-3xl text-emerald-600">0 / 100</p></div>
+        </div>
+        <div class="flex gap-3 justify-center">
+            <button onclick="window.print()" class="bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold">🖨️ طباعة النتيجة</button>
+        </div>
+    </div>
+
+    <footer class="max-w-4xl mx-auto mt-10 mb-8 text-center text-gray-500 text-sm no-print">
+        © هيكل الفيزياء - الصف 12 عام | مراجعة شاملة | Mr. Mohammed Hesham
+    </footer>
+
+    <script>
+        // ============================================================
+        // ⚠️ STEP 1: Replace with your EmailJS credentials
+        // ============================================================
+    const PUBLIC_KEY = "Rb3Lq8tXaFmc5YHUH";
+    const SERVICE_ID = "service_w15m64i";
+    const TEMPLATE_ID = "template_5b0u2tq";
+    const TARGET_EMAIL = "mohammedhesham872@gmail.com";
+        // ============================================================
+
+        (function(){ emailjs.init(PUBLIC_KEY); })();
+
+        // ========================
+        // DATA: The Questions (1-58)
+        // ========================
+        const allQuestions = [
+            // Part 1: Basic Concepts
+            { id: 1, q: "يريد طبيب إعطاء جرعة مقدارها (120 μg) من دواء مسكن باستخدام جهاز الإرحال الأيوني. إذا كان الجهاز يعمل بتيار ثابت مقداره (0.20 mA) ومعدل الحقن للأداة هو (600 μg/C)، فما المدة الزمنية المستغرقة؟", options: ["2000 s", "1 s", "1000 s", "500 s"], correct: "c" },
+            { id: 2, q: "استغرق جهاز الإرحال الأيوني زمناً مقداره (13.3 min) لإعطاء جرعة دواء كتلتها (104 μg). إذا كان معدل حقن الجهاز هو (650 μg/C)، فما هي شدة التيار الثابت المار؟", options: ["5.20 mA", "0.20 mA", "0.40 mA", "0.13 mA"], correct: "b" },
+            { id: 3, q: "إذا كانت علاقة الشحنة بالزمن تُعطى من العلاقة <span class='math'>q(t) = (1/3)t³ + 5t</span>. ما التعبير الصحيح للتيار الكهربائي بدلالة الزمن؟", options: ["i(t) = t² + 5t", "i(t) = t² + 5", "i(t) = t³ + 5", "i(t) = 3t³ + 5"], correct: "b" },
+            { id: 4, q: "عندما يسري تيار (10 mA) في موصل لمدة نصف ساعة؛ فإن مقدار الشحنة الكهربائية بوحدة كولوم (C) التي تعبر مقطعا عرضيا في هذا الموصل خلال هذه المدة تساوي:", options: ["0.3 C", "5.0 C", "18 C", "300 C"], correct: "c" },
+            { id: 5, q: "يتغير التيار المار في سلك مع الزمن وفقاً للمعادلة: <span class='math'>i(t) = 3t² + 2t + 1</span>. ما هي الشحنة الكلية التي تمر عبر المقطع العرضي للسلك من (t=0.0 s) إلى (t=3.0 s)؟", options: ["39.0 C", "34.0 C", "42.0 C", "37.0 C"], correct: "a" },
+            { id: 6, q: "أي الوحدات التالية تكافئ الأمبير؟", options: ["1A = C.s", "1A = C/s", "1A = C.s²", "1A = C/s²"], correct: "b" },
+            { id: 7, q: "أي العلاقات التالية صحيحة لحساب الشحنة الكهربائية عبر نقطة محددة في زمن t؟", options: ["q = -∫ i dt", "q = ∫ i dt", "q = ∫ (1/i) dt", "q = ∫ i² dt"], correct: "b" },
+            { id: 8, q: "بطارية مكتوب عليها (700 mAh). ما المدة الزمنية التي يمكن لهذه البطارية خلالها تزويد تيار بمقدار (100 μA)؟", options: ["7 s", "7 min", "7000 s", "7000 h"], correct: "d" },
+            { id: 9, q: "يمر تيار مستمر مقداره (8.0 mA) في سلك نحاسي. ما عدد الإلكترونات التي تعبر مقطع هذا السلك خلال دقيقة واحدة؟ (علماً بأن شحنة الإلكترون 1.6×10⁻¹⁹ C)", options: ["5.0 × 10¹⁶ e", "1.3 × 10¹⁷ e", "3.0 × 10¹⁸ e", "3.0 × 10²¹ e"], correct: "c" },
+            { id: 10, q: "إذا كانت الشحنة الكهربائية تتغير مع زمن من العلاقة <span class='math'>q(t) = αt⁴</span> وكان التيار الكهربائي يساوي (32 mA) عند الزمن (t= 2s)، ما مقدار الثابت α؟", options: ["0.004 C/s⁴", "0.004 C/s³", "0.001 C/s⁴", "0.001 C/s³"], correct: "c" },
+            
+            // Part 2: Resistivity & Dimensions
+            { id: 11, q: "تم توصيل سلكين من النحاس على التوالي في دائرة كهربائية مغلقة. إذا كان قطر السلك الأول ضعفي قطر السلك الثاني (d1=2d2)، فما هي النسبة بين كثافة التيار في السلك الأول إلى كثافة التيار في السلك الثاني (J1/J2)؟", options: ["1/4", "4", "1/2", "2"], correct: "a" },
+            { id: 12, q: "يتدفق تيار كهربائي شدته (0.250 mA) في سلك من النحاس تبلغ مساحة مقطعه العرضي (0.500 mm²). أوجد كثافة التيار في السلك بافتراض أن التيار منتظم", options: ["0.500 A/m²", "500 A/m²", "0.125 A/m²", "125 A/m²"], correct: "b" },
+            { id: 13, q: "ما كثافة التيار في سلك من الألمونيوم نصف قطره (1.0 cm) ويحمل تياراً شدته (2.0 mA)؟", options: ["2.0 A/m²", "6.4 A/m²", "0.64 A/m²", "64 A/m²"], correct: "b" },
+            { id: 14, q: "سلكان موصلان 1 و 2 نصف قطريهما R و 3R على الترتيب. إذا مر في السلكين التيار نفسه، أي من الآتي صحيح بالنسبة لكثافة التيار السطحي في السلكين؟", options: ["J2 = 3J1", "J2 = 9J1", "J2 = 1/3 J1", "J2 = 1/9 J1"], correct: "d" },
+            { id: 15, q: "طبق مجال كهربائي مقداره (1.2 V/m) داخل موصل، فنتجت عنه كثافة تيار مقدارها (3.0 × 10⁷ A/m²). احسب المقاومة النوعية لمادة هذا الموصل", options: ["4.0 × 10⁻⁸ Ω.m", "2.5 × 10⁷ Ω.m", "3.6 × 10⁷ Ω.m", "4.0 × 10⁻⁷ Ω.m"], correct: "a" },
+            { id: 16, q: "سلكان من نفس المادة، السلك الأول يمر به تيار ذو كثافة أكبر من السلك الثاني (J1 > J2). ماذا يمكنك الاستنتاج بشأن المجال الكهربائي داخل السلكين؟", options: ["E1 > E2", "E1 < E2", "E1 = E2", "لا توجد علاقة بينهما"], correct: "a" },
+            { id: 17, q: "يطبق مجال كهربائي مقداره 200 V/m بين طرفي موصل أسطواني نصف قطره 0.3 cm فيمر به تيار كهربائي 3.0 A. احسب المقاومة النوعية للموصل", options: ["1.88 × 10⁻³ Ω.m", "5.65 × 10⁻³ Ω.m", "2.12 × 10⁴ Ω.m", "6.36 × 10⁻² Ω.m"], correct: "a" },
+            { id: 18, q: "أي من التالية ليست وحدة قياس صحيحة للمقاومة النوعية لمادة الموصل؟", options: ["Ω.m", "V.m.s/C", "V.m.A", "V.m/A"], correct: "c" },
+            { id: 19, q: "سلكان من نفس المادة، الأول طوله (l1) ومساحة مقطعه (A1)، والثاني طوله (l2) ومساحة مقطعه (A2). ما هي النسبة بين المقاومة النوعية للسلك الأول إلى المقاومة النوعية للسلك الثاني؟", options: ["1:1", "1:2", "1:4", "2:1"], correct: "a" },
+            { id: 20, q: "ما مقاومة سلك نحاسي طوله l = 10.9 m وقطره d = 1.30 mm؟ (تبلغ المقاومة النوعية للنحاس 1.72 × 10⁻⁸ Ω.m)", options: ["0.035 Ω", "0.565 Ω", "0.141 Ω", "1.414 Ω"], correct: "b" },
+            { id: 21, q: "إذا تضاعف نصف قطر موصل للضعف مع ثبات طوله فإن مقاومته .................", options: ["تقل للنصف", "تقل للربع", "تزداد للضعف", "تزداد أربعة أضعاف"], correct: "b" },
+            { id: 22, q: "سلك نحاسي أسطواني طوله (L) ومقاومته (R). إذا تم تمديده بانتظام حتى تضاعف طوله ليصبح (2L) مع ثبات الحجم، فإن مقاومته الجديدة تصبح:", options: ["R/2", "R/4", "2R", "4R"], correct: "d" },
+            { id: 23, q: "سلك نحاسي طوله 1.00 m ونصف قطره 0.500 mm تم تمديده ليصبح طوله 2.00 m. ما التغير الحادث في المقاومة في صورة كسر ΔR/R الناتج عن تمديد السلك؟", options: ["1", "2", "3", "4"], correct: "c" },
+            { id: 24, q: "سلكان مصمتان A و B مصنوعان من مادتين مختلفتين. طول السلك A يساوي ضعف طول السلك B (LA = 2LB) ونصف قطر السلك A يساوي ضعف نصف قطر السلك B (rA = 2rB). إذا كانت لهما نفس المقاومة الكهربائية، فما هي العلاقة بين مقاومية المادتين (ρA و ρB)؟", options: ["ρA = ρB", "ρA = 0.5 ρB", "ρA = 2 B", "ρA = 4 ρB"], correct: "b" },
+            { id: 25, q: "متوازي مستطيلات مصنت من مادة موصلة أبعاده هي (1.00 cm × 2.00 cm × 4.00 cm) ومقاومته النوعية (ρ = 3.00 × 10⁻³ Ω.m). ما هي أقصى مقاومة كهربائية ممكنة لهذا المتوازي بين أي وجهين متقابلين؟", options: ["0.0375 Ω", "0.15 Ω", "0.60 Ω", "6.00 Ω"], correct: "d" },
+
+            // Part 3: Ohm's Law
+            { id: 26, q: "تم تطبيق فرق جهد كهربائي مقداره (12.0 V) على سلك طوله (1000 km) ومساحة مقطعه العرضي (4.50 mm²). إذا كان التيار المار في السلك هو (3.20 × 10⁻³ A) فما هي المقاومة النوعية (ρ) لمادة هذا السلك؟", options: ["1.69 × 10⁻⁸ Ω.m", "1.72 × 10⁻ Ω.m", "2.44 × 10⁻⁸ Ω.m", "5.60 × 10⁻⁸ Ω.m"], correct: "c" },
+            { id: 27, q: "تتصف المقاومة بإحدى الصفات الآتية:", options: ["تزداد بزيادة طول الموصل وبزيادة مساحة مقطعه", "تقل بزيادة طول الموصل وبزيادة مساحة مقطعه", "تزداد بزيادة طول الموصل وبنقصان مساحة مقطعه", "تعتمد على نوع المادة وليس على أبعاد الموصل الهندسية"], correct: "c" },
+            { id: 28, q: "يُعرّف طالب عن قانون أوم بالقول: 'المقاومة هي النسبة بين فرق الجهد والتيار، وبما أنها تساوى R = ΔV/i فإن المقاومة تعتمد طردياً على الجهد وعكسياً على التيار'. ما الخطأ العلمي في هذا القول للمقاوم الأومي؟", options: ["المقاومة الأومية ثابتة لا تعتمد على الجهد أو التيار", "المقاومة تعتمد فقط على مربع التيار طبقاً لقوانين تبدد الطاقة الحرارية", "القول صحيح تماماً للمقاومات الأومية ولكنه خاطئ فقط للبطاريات الحقيقية", "الخطأ هو أن المقاومة تعتمد طردياً على التيار وعكسياً على فرق الجهد الكهربائي"], correct: "a" },
+            { id: 29, q: "دائرة كهربائية بسيطة تحتوي على مصدر جهد مثالي (Vemf = 6.0 V) ومقاوم أومي (R = 12 Ω). ما مقدار الشحنة الكهربائية الكلية بالكولوم التي تمر عبر المقاوم خلال دقيقة واحدة؟", options: ["0.50 C", "2.0 C", "30 C", "360 C"], correct: "c" },
+            { id: 30, q: "بطارية لها جهد قدره 14.50 V في حالة عدم توصيلها بدائرة كهربائية. عندما تم توصيل مقاوم مقاومته 17.91 Ω بطرفي البطارية، هبط فرق الجهد إلى 12.68 V. ما قيمة المقاومة الداخلية للبطارية؟", options: ["0.10 Ω", "1.82 Ω", "2.57 Ω", "3.12 Ω"], correct: "c" },
+            { id: 31, q: "عندما يتم توصيل بطارية بمقاوم مقاومته 100 Ω تكون شدة التيار 4.00 A. عندما يتم توصيل البطارية نفسها بمقاوم مقاومته 400 Ω، تكون شدة التيار 1.01 A. أوجد القوة الدافعة الكهربائية التي وفرتها البطارية؟", options: ["400 V", "404 V", "416 V", "500 V"], correct: "c" },
+            { id: 32, q: "وصلت بطارية مع مصباح مقاومته (2 Ω) فمر فيه تيار كهربائي (0.4 A) وعند توصيل البطارية نفسها مع مصباح مقاومته (5 Ω) مر فيه تيار (0.2 A)؛ فإن المقاومة الداخلية للبطارية بوحدة أوم (Ω) تساوي:", options: ["0.2 Ω", "0.5 Ω", "1.0 Ω", "2.0 Ω"], correct: "d" },
+            { id: 33, q: "وُصل مصباح ضوئي بمصدر جهد، فلوحظ انخفاض في الجهد بمقدار (6.20 V) عبر المصباح وتدفق تيار شدته (4.10 A)، إذا وُصل مصباح ثانٍ مماثل تماماً للأول على التوالي مع المصباح الأول في نفس الدائرة نفسها، فما الذي تتوقع حدوثه لشدة التيار الكلي المار في الدائرة ومقاومة كل مصباح؟ (بافتراض ثبات درجة الحرارة)", options: ["يظل التيار الكلي ثابتاً ويتوزع الجهد بالتساوي فقط", "يقل التيار الكلي إلى النصف وتظل مقاومة كل مصباح ثابتة", "يقل التيار الكلي وتزداد مقاومة كل مصباح فردي بشكل مستقل", "يزداد التيار الكلي للضعف لأن عدد المصابيح زاد"], correct: "b" },
+            { id: 34, q: "في الدائرة الموضحة: بطارية 24V متصلة بثلاث مقاومات R متصلة على التوازي، والأميتر يقيس التيار الكلي. إذا كانت قراءة الأميتر (6A)، ما مقدار المقاوم R؟", options: ["3 Ω", "4 Ω", "9 Ω", "12 Ω"], correct: "c" },
+            { id: 35, q: "في الدائرة الموضحة: بطارية 9V متصلة بمقاومة 10Ω ومقاومتين 40Ω و 20Ω على التوازي. ما مقدار قراءة الأميتر في الدائرة؟", options: ["0.087 A", "0.117 A", "0.235 A", "0.430 A"], correct: "c" },
+            { id: 36, q: "سلكان موصلان (1) و(2) من النحاس؛ طول الأول (L) ونصف قطر مقطعه (r) وطول الثاني (2L) ونصف قطر مقطعه (2r). العلاقة بين مقاومتي الموصلين (R1 و R2).", options: ["R1 = R2", "R1 = 2R2", "R2 = 2R1", "R2 = 4R1"], correct: "a" },
+            { id: 37, q: "في الدائرة الموضحة بالشكل: بطارية 40V متصلة بمقاومات R1=2Ω, R2=1Ω, R3=5Ω على التوالي. ما مقدار التيار الكهربائي المتدفق في المقاوم (R2)؟", options: ["8 A", "5 A", "40 A", "20 A"], correct: "b" },
+            { id: 38, q: "في الدائرة الموضحة بالشكل: بطارية 15V متصلة بمقاومة R1=4Ω و R2=6Ω على التوالي. فإن فرق الجهد بين طرفي المقاومة (R1) بوحدة الفولت (V) يساوي:", options: ["1.50 V", "3.75 V", "6.0 V", "9.0 V"], correct: "b" },
+            { id: 39, q: "في الدائرة الموضحة بالشكل: بطارية 24V متصلة بثلاث مقاومات R متصلة على التوازي، والأميتر يقيس التيار الكلي (6A). ما مقدار المقاوم R؟", options: ["3 Ω", "4 Ω", "9 Ω", "12 Ω"], correct: "c" },
+            { id: 40, q: "في الدائرة الموضحة بالشكل: بطارية 12V متصلة بمقاومة R1=6Ω على التوالي مع مجموعة توازي (R2=6Ω متوازية مع R3=2Ω و R4=4Ω متسلسلتين) ثم مقاومة R5=3Ω. ما مقدار المقاومة المكافئة للدائرة؟", options: ["6.00 Ω", "9.00 Ω", "12.0 Ω", "21.0 Ω"], correct: "b" },
+            { id: 41, q: "سلكان أسطوانيان 1 و2 مصنوعان من نفس المادة، ولهما نفس المقاومة. إذا كان طول السلك 1 يساوي نصف طول السلك 2، فما نسبة مساحة المقطع العرضي A1/A2؟", options: ["A1/A2 = 0.5", "A1/A2 = 2", "A1/A2 = 0.25", "A1/A2 = 4"], correct: "a" },
+            { id: 42, q: "إذا كانت المقاومة النوعية لمادة موصل تساوي (2.0 × 10⁻⁸ Ω.m)، فما هي الموصلية الكهربائية (σ) لهذه المادة؟", options: ["0.5 × 10⁻⁷ (Ω.m)⁻¹", "5.0 × 10⁻⁸ (Ω.m)⁻¹", "5.0 × 10⁷ (Ω.m)⁻¹", "2.0 × 10⁸ (Ω.m)⁻¹"], correct: "c" },
+            { id: 43, q: "أي من الوحدات التالية مكافئة لوحدة الموصلية الكهربائية؟", options: ["V.A/m", "V.A.m", "V/(A.m)", "A/(V.m)"], correct: "d" },
+            { id: 44, q: "تم سحب سلك معدني بانتظام بحيث تضاعف طوله إلى مثلي ما كان عليه مع ثبوت درجة الحرارة. ماذا يحدث للموصلية الكهربائية (σ) لمادة هذا السلك؟", options: ["تظل ثابتة دون تغيير", "تقل إلى النصف", "تزداد إلى أربعة أمثال", "تقل إلى الربع"], correct: "a" },
+            { id: 45, q: "إذا كانت النسبة بين الموصلية الكهربائية لمادتين هي (σ1/σ2 = 4/1)، فما هي النسبة بين مقاومتيهما النوعية (ρ1/ρ2) عند نفس درجة الحرارة؟", options: ["1/4", "4/1", "1/2", "2/1"], correct: "a" },
+            { id: 46, q: "تم تطبيق فرق جهد كهربائي مقداره (12.0 V) على سلك طوله (1000 km) ومساحة مقطعه العرضي (4.50 mm²). إذا كان التيار المار في السلك هو (3.20 × 10⁻³ A) فما هي المقاومة النوعية (ρ) لمادة هذا السلك؟", options: ["1.69 × 10⁻⁸ Ω.m", "1.72 × 10⁻ Ω.m", "2.44 × 10⁻⁸ Ω.m", "5.60 × 10⁻⁸ Ω.m"], correct: "c" },
+            { id: 47, q: "تتصف المقاومة بإحدى الصفات الآتية:", options: ["تزداد بزيادة طول الموصل وبزيادة مساحة مقطعه", "تقل بزيادة طول الموصل وبزيادة مساحة مقطعه", "تزداد بزيادة طول الموصل وبنقصان مساحة مقطعه", "تعتمد على نوع المادة وليس على أبعاد الموصل الهندسية"], correct: "c" },
+            { id: 48, q: "في الدائرة الموضحة: بطارية 12V متصلة بمقاومة R1=2.4Ω. ما شدة التيار المار في الدائرة؟", options: ["2.0 A", "0.2 A", "28.8 A", "5.0 A"], correct: "a" },
+            { id: 49, q: "وحدة قياس سعة الشحن الكلية للبطاريات القابلة للشحن هي (مللي أمبير ساعة). كم تعادل هذه الوحدة بالنظام الدولي للوحدات (كولوم)؟", options: ["1 C", "3.6 C", "120 C", "3600 C"], correct: "d" },
+            { id: 50, q: "بطارية قابلة للشحن تعمل بمعدل (3.0 mAh). ما الشحنة الكلية بوحدة الكولوم (C) التي يمكن لهذه البطارية توفيرها عندما تكون مشحونة بالكامل؟", options: ["3.0 C", "1.6 C", "10.8 C", "3.6 C"], correct: "c" },
+
+            // Part 4: Circuit Diagrams (Questions 51-58)
+            { id: 51, q: "ما مقدار المقاومة المكافئة للدائرة؟ (دائرة مختلطة: مقاومة 2Ω على التوالي مع توازي مقاومتين 6Ω و 3Ω).", options: ["11 Ω", "5 Ω", "4 Ω", "1 Ω"], correct: "c" },
+            { id: 52, q: "ما مقدار المقاومة المكافئة للدائرة؟ (دائرة توازي: مصدر 24V، فرع به مصباح 30Ω، والفرع الآخر به مصباحان 10Ω و 20Ω على التوالي).", options: ["15 Ω", "30 Ω", "60 Ω", "80 Ω"], correct: "a" },
+            { id: 53, q: "ما مقدار التيار المار في المقاومة 10Ω؟ (دائرة مختلطة: مصدر 15V، مقاومة 10Ω على التوالي مع توازي مقاومتين 8Ω و 5Ω).", options: ["1.50 A", "1.45 A", "1.15 A", "0.70 A"], correct: "c" },
+            { id: 54, q: "أي التعبيرات التالية صحيحة بالنسبة للتيار الكهربائي المار في كل مقاومة في الدائرة الموضحة؟ (دائرة مختلطة: مقاومة R1=2Ω على التوالي مع توازي R2=6Ω و R3=3Ω).", options: ["I1 > I3 > I2", "I1 > I2 = I3", "I2 > I3 > I1", "I2 = I3 > I1"], correct: "a" },
+            { id: 55, q: "أي من الدوائر التالية تمثل دائرة مركبة؟", options: ["(a) دائرة بسيطة على التوالي", "(b) دائرة مركبة (مقاومة على التوالي مع توازي)", "(c) دائرة بسيطة على التوازي", "(d) دائرة قصر"], correct: "b" },
+            { id: 56, q: "كيف تم توصيل جميع المقاومات بالشكل؟ (مقاومة على التوالي مع مقاومتين متوازيتين).", options: ["على التوازي", "على التوالي", "دائرة مركبة على التوالي والتوازي", "لا يوجد مقاومات في الشكل"], correct: "c" },
+            { id: 57, q: "أي من المخططات التالية تمثل دائرة مركبة؟", options: ["(A) دائرة مركبة (مصباح على التوالي مع توازي مصباحين)", "(B) دائرة بسيطة على التوالي", "(C) دائرة بسيطة على التوازي", "(D) دائرة مفتوحة"], correct: "a" },
+            { id: 58, q: "أي من العبارات التالية صحيحة حول أجهزة الأميتر والفولتميتر؟", options: ["مقاومة الأميتر صغيرة جداً", "مقاومة الفولتميتر صغيرة جداً", "يُوصل الأميتر على التوازي في الدائرة", "يُوصل الفولتميتر على التوالي في الدائرة"], correct: "a" }
+        ];
+
+        // ========================
+        // LOGIC: Render & Shuffle
+        // ========================
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function renderQuestions() {
+            // Split into sections
+            const s1 = allQuestions.filter(q => q.id <= 10);
+            const s2 = allQuestions.filter(q => q.id > 10 && q.id <= 25);
+            const s3 = allQuestions.filter(q => q.id > 25 && q.id <= 50);
+            const s4 = allQuestions.filter(q => q.id > 50); // Diagrams
+
+            renderList('section1-list', shuffleArray(s1));
+            renderList('section2-list', shuffleArray(s2));
+            renderList('section3-list', shuffleArray(s3));
+            renderList('section4-list', shuffleArray(s4)); 
+        }
+
+        function renderList(elementId, questions) {
+            const container = document.getElementById(elementId);
+            container.innerHTML = questions.map(q => `
+                <li class="border-r-4 border-indigo-500 pr-4 py-2" id="q-${q.id}">
+                    <strong>${q.id}.</strong> ${q.q}<br>
+                    <label class="mr-4 cursor-pointer block mt-1"><input type="radio" name="q${q.id}" value="a" class="mr-2"> a) ${q.options[0]}</label>
+                    <label class="mr-4 cursor-pointer block mt-1"><input type="radio" name="q${q.id}" value="b" class="mr-2"> b) ${q.options[1]}</label>
+                    <label class="mr-4 cursor-pointer block mt-1"><input type="radio" name="q${q.id}" value="c" class="mr-2"> c) ${q.options[2]}</label>
+                    <label class="mr-4 cursor-pointer block mt-1"><input type="radio" name="q${q.id}" value="d" class="mr-2"> d) ${q.options[3]}</label>
+                    <div class="answer-box text-green-700 mt-2 font-medium hidden">✅ الإجابة الصحيحة: ${q.correct}</div>
+                </li>
+            `).join('');
+        }
+
+        function toggleAnswers() {
+            document.querySelectorAll('.answer-box').forEach(el => el.classList.toggle('hidden'));
+        }
+
+        function gradeExam() {
+            let correctCount = 0;
+            allQuestions.forEach(q => {
+                const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+                const li = document.getElementById(`q-${q.id}`);
+                const isCorrect = selected && selected.value === q.correct;
+                
+                if (isCorrect) {
+                    correctCount++;
+                    li.classList.add('correct');
+                    li.classList.remove('incorrect');
+                } else {
+                    li.classList.add('incorrect');
+                    li.classList.remove('correct');
+                }
+            });
+
+            const score = (correctCount / allQuestions.length) * 100;
+            document.getElementById('res-total').textContent = `${Math.round(score)} / 100`;
+            document.getElementById('res-name').textContent = document.getElementById('studentName').value || 'طالب';
+            document.getElementById('res-date').textContent = new Date().toLocaleDateString('ar-EG');
+            
+            document.getElementById('results-panel').classList.remove('hidden');
+            document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Timer Logic
+        let timeRemaining = 5400; // 90 minutes
+        setInterval(() => {
+            if (timeRemaining <= 0) return;
+            timeRemaining--;
+            const m = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+            const s = (timeRemaining % 60).toString().padStart(2, '0');
+            document.getElementById('timer').textContent = `${m}:${s}`;
+            if (timeRemaining < 300) document.getElementById('timer').classList.add('timer-warning');
+        }, 1000);
+
+        window.addEventListener('DOMContentLoaded', renderQuestions);
+    </script>
+</body>
+</html>
