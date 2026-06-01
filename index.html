@@ -15,6 +15,17 @@
         .timer-warning { color: #dc2626 !important; animation: pulse 1s infinite; }
         @keyframes pulse { 50% { opacity: 0.7; } }
         @media print { .no-print { display: none !important; } }
+        .success-badge { 
+            display: inline-block; 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+        .grade-excellent { background: #dcfce7; color: #166534; }
+        .grade-good { background: #fef3c7; color: #92400e; }
+        .grade-pass { background: #dbeafe; color: #1e40af; }
+        .grade-fail { background: #fee2e2; color: #991b1b; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 p-4 md:p-8 min-h-screen">
@@ -94,6 +105,22 @@
             <div class="bg-purple-50 p-4 rounded-xl text-center"><p>التاريخ</p><p id="res-date" class="font-bold text-xl text-purple-700">-</p></div>
             <div class="bg-emerald-50 p-4 rounded-xl text-center"><p>الدرجة النهائية</p><p id="res-total" class="font-bold text-3xl text-emerald-600">0 / 100</p></div>
         </div>
+
+        <!-- Success Rate Badge -->
+        <div class="text-center mb-6">
+            <span id="success-badge" class="success-badge grade-excellent">ممتاز - 100%</span>
+            <p id="success-percent" class="text-4xl font-bold text-emerald-600 mt-2">100%</p>
+            <p class="text-sm text-gray-500">نسبة النجاح</p>
+        </div>
+
+        <!-- Email Send Button -->
+        <div class="text-center mb-6">
+            <button id="sendEmailBtn" onclick="sendResultsToEmail()" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white text-lg px-8 py-3 rounded-xl font-bold shadow-xl transition transform hover:scale-105 cursor-pointer">
+                📧 إرسال النتيجة لإيميل المعلم
+            </button>
+            <p id="emailStatus" class="text-sm mt-2 text-center font-medium"></p>
+        </div>
+
         <div class="flex gap-3 justify-center">
             <button onclick="window.print()" class="bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold">🖨️ طباعة النتيجة</button>
         </div>
@@ -105,12 +132,12 @@
 
     <script>
         // ============================================================
-        // ⚠️ STEP 1: Replace with your EmailJS credentials
+        // ⚠️ STEP 1: EmailJS Configuration
         // ============================================================
-    const PUBLIC_KEY = "Rb3Lq8tXaFmc5YHUH";
-    const SERVICE_ID = "service_w15m64i";
-    const TEMPLATE_ID = "template_5b0u2tq";
-    const TARGET_EMAIL = "mohammedhesham872@gmail.com";
+        const PUBLIC_KEY = "Rb3Lq8tXaFmc5YHUH";
+        const SERVICE_ID = "service_w15m64i";
+        const TEMPLATE_ID = "template_5b0u2tq";
+        const TARGET_EMAIL = "mohammedhesham872@gmail.com";
         // ============================================================
 
         (function(){ emailjs.init(PUBLIC_KEY); })();
@@ -247,12 +274,83 @@
             });
 
             const score = (correctCount / allQuestions.length) * 100;
+            const successRate = Math.round(score);
+            
             document.getElementById('res-total').textContent = `${Math.round(score)} / 100`;
             document.getElementById('res-name').textContent = document.getElementById('studentName').value || 'طالب';
             document.getElementById('res-date').textContent = new Date().toLocaleDateString('ar-EG');
             
+            // Update success badge
+            const badge = document.getElementById('success-badge');
+            const percent = document.getElementById('success-percent');
+            percent.textContent = `${successRate}%`;
+            
+            if(successRate >= 90) {
+                badge.textContent = 'ممتاز';
+                badge.className = 'success-badge grade-excellent';
+            } else if(successRate >= 75) {
+                badge.textContent = 'جيد';
+                badge.className = 'success-badge grade-good';
+            } else if(successRate >= 50) {
+                badge.textContent = 'ناجح';
+                badge.className = 'success-badge grade-pass';
+            } else {
+                badge.textContent = 'يحتاج تحسين';
+                badge.className = 'success-badge grade-fail';
+            }
+            
             document.getElementById('results-panel').classList.remove('hidden');
             document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+            
+            // Show email button after grading
+            document.getElementById('sendEmailBtn').classList.remove('hidden');
+        }
+
+        function sendResultsToEmail() {
+            const btn = document.getElementById('sendEmailBtn');
+            const status = document.getElementById('emailStatus');
+            btn.disabled = true;
+            btn.textContent = '⏳ جاري الإرسال...';
+
+            const name = document.getElementById('studentName').value || 'N/A';
+            const date = document.querySelector('input[type="text"]').value || new Date().toLocaleDateString('ar-EG');
+            const score = document.getElementById('res-total').textContent;
+            const successRate = document.getElementById('success-percent').textContent;
+
+            let answersHTML = `<table style="border:1px solid #e5e7eb; border-collapse:collapse; width:100%; font-family:'Cairo', sans-serif; font-size:14px; direction:rtl;">
+                <tr style="background:#4F46E5; color:white;"><th style="border:1px solid #e5e7eb; padding:8px;">السؤال</th><th style="border:1px solid #e5e7eb; padding:8px;">إجابة الطالب</th><th style="border:1px solid #e5e7eb; padding:8px;">الحالة</th></tr>`;
+            
+            const correctAnswers = ['c','b','b','c','a','b','b','d','c','c','a','b','b','d','a','a','a','c','a','b','b','d','c','b','d','c','c','a','c','c','c','d','b','c','c','a','b','b','c','b','a','c','d','a','a','c','c','a','d','c','c','a','c','a','b','c','c','a'];
+            
+            for(let i=1; i<=58; i++) {
+                const sel = document.querySelector(`input[name="q${i}"]:checked`);
+                const isCorrect = sel && sel.value === correctAnswers[i-1];
+                answersHTML += `<tr><td style="border:1px solid #e5e7eb; padding:6px;">${i}</td><td style="border:1px solid #e5e7eb; padding:6px;">${sel ? sel.value.toUpperCase() : '-'}</td><td style="border:1px solid #e5e7eb; padding:6px; color:${isCorrect ? 'green' : 'red'}">${isCorrect ? '✅ صحيح' : '❌ خطأ'}</td></tr>`;
+            }
+            answersHTML += '</table>';
+
+            const templateParams = {
+                to_email: TARGET_EMAIL,
+                student_name: name,
+                exam_date: date,
+                total_score: score,
+                success_rate: successRate,
+                answers_table: answersHTML
+            };
+
+            emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+                .then(() => {
+                    status.textContent = '✅ تم الإرسال بنجاح! تحقق من صندوق الوارد.';
+                    status.style.color = '#059669';
+                    btn.textContent = '✓ تم الإرسال';
+                })
+                .catch(err => {
+                    status.textContent = '❌ فشل الإرسال. تأكد من إعدادات EmailJS أو افحص الـ Console.';
+                    status.style.color = '#dc2626';
+                    btn.disabled = false;
+                    btn.textContent = '📧 إعادة الإرسال';
+                    console.error('EmailJS Error:', err);
+                });
         }
 
         // Timer Logic
